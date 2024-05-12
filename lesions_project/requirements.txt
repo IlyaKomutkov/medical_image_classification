@@ -1,0 +1,9 @@
+django==5.0.6
+torch==2.3.0
+einops==0.7.0
+numpy==1.26.0
+pillow==10.3.0
+torchvision==0.18.0
+ultralytics==8.2.13
+opencv-python==4.9.0.80
+dill==0.3.8

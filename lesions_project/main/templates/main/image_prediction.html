@@ -1,0 +1,8 @@
+<h3>Image name:</h3>
+{{ lesion.name }}
+<h3>Disease:</h3>
+{{ lesion.disease }}
+<h3>Image:</h3>
+<img src="{{ lesion.lesion_Img.url }}" class="img-responsive" style="width: 20%; float: left; margin-right: 100%;" />
+<h3>Lesion area:</h3>
+<img src="{{ lesion.lesion_Segmentation_Img.url }}" class="img-responsive" style="width: 20%; float: left; margin-right: 10px;" />

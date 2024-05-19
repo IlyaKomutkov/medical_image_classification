@@ -15,7 +15,7 @@ from .utils import get_scaled_mask, overlay
 
 n_channels = 3  # RGB
 network_classification = CapsNet(conv_inputs=n_channels,
-                                 num_classes=7,  # category_number
+                                 num_classes=7,
                                  init_weights=False, )
 network_classification.load_state_dict(torch.load('model_weights/gpu_78_epochs_capsnet.pth',
                                                   map_location=torch.device('cpu')))
@@ -26,12 +26,23 @@ transforms_img = transforms.Compose([Resize,
                                      transforms.ToTensor(),
                                      normalize])
 
-idx_to_class = {0: 'akiec', 1: 'bcc', 2: 'bkl', 3: 'df', 4: 'mel', 5: 'nv', 6: 'vasc'}  # добавить расшифровку болезней
+idx_to_class = {0: "Actinic keratoses and intraepithelial carcinoma / Bowen's disease",
+                1: 'basal cell carcinoma',
+                2: 'benign keratosis-like lesions solar lentigines / seborrheic keratoses and lichen-planus like keratoses',
+                3: 'dermatofibroma', 4: 'melanoma', 5: 'melanocytic nevi',
+                6: 'vascular lesions (angiomas, angiokeratomas, pyogenic granulomas and hemorrhage)'}
 
 network_segmentation = YOLO('model_weights/gpu_10_epochs_yolo.pt')
 
 
 def index(request):
+    lesion_objects = Lesion.objects.all()
+    if len(lesion_objects) == 0:
+        return render(request, 'no_photos.html')
+    return render(request, 'index.html', {'lesion_objects': lesion_objects})
+
+
+def upload(request):
     if request.method == 'POST':
         form = LesionForm(request.POST, request.FILES)
 
@@ -40,7 +51,7 @@ def index(request):
             return redirect(reverse('main:classification', args=(form['name'].value(),)))  # tuple to save string
     else:
         form = LesionForm()
-    return render(request, 'index.html', {'form': form})
+    return render(request, 'upload.html', {'form': form})
 
 
 def classification(request, lesion_name):
@@ -67,7 +78,7 @@ def classification(request, lesion_name):
     segm_im = Image.fromarray(image_with_masks)
     blob = BytesIO()
     segm_im.save(blob, 'JPEG')
-    lesion_obj.lesion_Segmentation_Img.save(f'{lesion_name}_segmented.jpg', File(blob), save=True)
+    lesion_obj.lesion_Segmentation_Img.save(f'{lesion_name}_segmented.jpg', File(blob))
 
     return render(request, 'image_prediction.html',
                   {'lesion': lesion_obj})

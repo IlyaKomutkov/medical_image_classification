@@ -1,6 +1,8 @@
-<h1>Upload skin lesion photo:</h1>
-<form method = "post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Upload</button>
-</form>
+<h1>Uploaded images:</h1>
+{% for lesion in lesion_objects %}
+     <div class="col-md-4">
+             <a href="/classification/{{ lesion.name }}">{{ lesion.name }}</a>
+             <img src="{{ lesion.lesion_Img.url }}" class="img-responsive" style="width: 20%; float: left; margin-right: 100%;" />
+     </div>
+{% endfor %}
+You can <a href="/upload/">upload</a> more images.

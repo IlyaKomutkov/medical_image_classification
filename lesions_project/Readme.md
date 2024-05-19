@@ -1,7 +1,6 @@
-Для запуска проекта нужно создать и активировать виртуальное окружение, а затем запустить команды:
+Для запуска проекта нужно запустить команды:
 ```
-pip install -r requirements.txt
-python manage.py makemigrations
-python manage.py migrate
-python manage.py runserver
+mkdir -p media/images
+docker-compose up --build
 ```
+И открыть в браузере ```localhost```

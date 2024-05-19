@@ -7,3 +7,5 @@ torchvision==0.18.0
 ultralytics==8.2.13
 opencv-python==4.9.0.80
 dill==0.3.8
+psycopg2-binary==2.9.9
+gunicorn==22.0.0
